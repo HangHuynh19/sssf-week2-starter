@@ -59,11 +59,13 @@ describe('GET /api/v1', () => {
     email: randomstring.generate(9) + '@user.fi',
     password: 'asdfQEWR1234',
   };
+  // eslint-disable-next-line no-restricted-properties
   it('should create a new user', async () => {
     await postUser(app, testUser);
   });
 
   // test login
+  // eslint-disable-next-line no-restricted-properties
   it('should return a user object and bearer token on valid credentials', async () => {
     user = await postAuthLogin(app, {
       username: testUser.email!,
@@ -79,7 +81,7 @@ describe('GET /api/v1', () => {
 
   // test get single user
   it('should return single user', async () => {
-    await getSingleUser(app, user.user._id);
+    await getSingleUser(app, String(user.user._id));
   });
 
   // test update user
@@ -96,14 +98,15 @@ describe('GET /api/v1', () => {
   let catID: string;
   it('should upload a cat', async () => {
     const message = await postCat(app, token, 'cat.jpg');
-    catID = message.data._id;
+    catID = String(message.data._id);
   });
 
   // test cat upload with GPS
   let catID2: string;
+  // eslint-disable-next-line no-restricted-properties
   it('should upload a cat with GPS', async () => {
     const message = await postCat(app, token, 'picWithGPS.jpg');
-    catID2 = message.data._id;
+    catID2 = String(message.data._id);
   });
 
   // test get all cats
@@ -135,7 +138,7 @@ describe('GET /api/v1', () => {
   let catID3: string;
   it('should upload a cat for admin test', async () => {
     const message = await postCat(app, token, 'cat.jpg');
-    catID3 = message.data._id;
+    catID3 = String(message.data._id);
   });
 
   // login as admin

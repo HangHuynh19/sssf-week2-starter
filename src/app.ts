@@ -7,6 +7,9 @@ import cors from 'cors';
 import {notFound, errorHandler} from './middlewares';
 import api from './api';
 import MessageResponse from './interfaces/MessageResponse';
+import authRoute from './api/routes/authRoute';
+import catRoute from './api/routes/catRoute';
+import userRoute from './api/routes/userRoute';
 
 const app = express();
 
@@ -22,6 +25,9 @@ app.get<{}, MessageResponse>('/', (req, res) => {
 });
 
 app.use('/api/v1', api);
+app.use('auth', authRoute);
+app.use('cats', catRoute);
+app.use('users', userRoute);
 
 app.use(notFound);
 app.use(errorHandler);

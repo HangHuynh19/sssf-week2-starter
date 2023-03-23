@@ -30,7 +30,7 @@ const getUser = (url: string | Function): Promise<User[]> => {
   });
 };
 
-const getSingleUser = (url: string | Function, id: number): Promise<User> => {
+const getSingleUser = (url: string | Function, id: string): Promise<User> => {
   return new Promise((resolve, reject) => {
     request(url)
       .get('/api/v1/users/' + id)
@@ -111,7 +111,7 @@ const getCurrentUser = (
         if (err) {
           reject(err);
         } else {
-          const user = response.body;
+          const user = response.body.data;
           expect(user).toHaveProperty('_id');
           expect(user).toHaveProperty('user_name');
           expect(user).toHaveProperty('email');

@@ -39,6 +39,9 @@ router
     upload.single('cat'),
     makeThumbnail,
     getCoordinates,
+    body('cat_name').notEmpty().escape(),
+    body('birthdate').isDate(),
+    body('weight').isNumeric(),
     catPost
   );
 
@@ -50,16 +53,24 @@ router
 
 router
   .route('/admin/:id')
-  .put(passport.authenticate('jwt', {session: false}), catPutAdmin)
-  .delete(passport.authenticate('jwt', {session: false}), catDeleteAdmin);
+  .put(passport.authenticate('jwt', {session: false}), param('id'), catPutAdmin)
+  .delete(
+    passport.authenticate('jwt', {session: false}),
+    param('id').notEmpty(),
+    catDeleteAdmin
+  );
 
 router
   .route('/:id')
-  .get(param('id'), catGet)
-  .put(passport.authenticate('jwt', {session: false}), param('id'), catPut)
+  .get(param('id').isNumeric(), catGet)
+  .put(
+    passport.authenticate('jwt', {session: false}),
+    param('id').notEmpty(),
+    catPut
+  )
   .delete(
     passport.authenticate('jwt', {session: false}),
-    param('id'),
+    param('id').notEmpty(),
     catDelete
   );
 

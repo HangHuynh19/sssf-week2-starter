@@ -20,7 +20,7 @@ const getCat = (url: string | Function): Promise<Cat[]> => {
             expect(cat.owner._id).not.toBeUndefined();
             expect(cat).toHaveProperty('weight');
             expect(cat).toHaveProperty('birthdate');
-            expect(cat.location).toHaveProperty('type');
+            expect(cat.coords).toHaveProperty('type');
           });
           resolve(cats);
         }
@@ -42,7 +42,7 @@ const getSingleCat = (url: string | Function, id: string): Promise<Cat> => {
           expect(cat.owner._id).not.toBeUndefined();
           expect(cat).toHaveProperty('weight');
           expect(cat).toHaveProperty('birthdate');
-          expect(cat.location).toHaveProperty('type');
+          expect(cat.coords).toHaveProperty('type');
           resolve(response.body);
         }
       });
@@ -60,11 +60,12 @@ const postCat = (
       .set('Content-type', 'form-data')
       .set('Authorization', 'Bearer ' + token)
       .attach('cat', 'test/' + pic)
-      .field('cat_name', 'Test Cat ' + new Date().toLocaleDateString('fi-FI'))
+      .field('cat_name', 'Test Cat ' + new Date().toISOString())
       .field('birthdate', '2020-01-01')
       .field('weight', 13.3)
       .expect(200, (err, response) => {
         if (err) {
+          console.log('Errr', err);
           reject(err);
         } else {
           const cat: DBMessageResponse = response.body;
@@ -148,8 +149,9 @@ const adminDeleteCat = (
           reject(err);
         } else {
           const cat: DBMessageResponse = response.body;
+          const catData: Cat = cat.data as Cat;
           expect(cat.message).not.toBe('');
-          expect(cat.data._id).toBe(id);
+          expect(catData._id).toBe(id);
           resolve(cat);
         }
       });
